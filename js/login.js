@@ -40,7 +40,7 @@ async function apiRegister({ email, password, firstName, lastName, phone }) {
 
 async function apiSendReset(email) {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://arathy-20.github.io/Hivemind/login.html'
+    redirectTo: 'https://arathy-20.github.io/Hivemind_kerala/login.html'
   });
   if (error) throw new Error(error.message);
 }
@@ -174,7 +174,7 @@ async function doSocial(provider){
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: 'https://arathy-20.github.io/Hivemind/home.html',
+        redirectTo: 'https://arathy-20.github.io/Hivemind_kerala/home.html',
         queryParams: { access_type: 'offline', prompt: 'select_account' }
       }
     });
