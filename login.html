@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — Hivemind Patient Portal</title>
+  <meta name="description" content="Sign in to your Hivemind account to manage your therapy appointments in Kerala."/>
+  <meta name="robots" content="noindex"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+  <!-- All styles in css/login.css -->
+  <link rel="stylesheet" href="css/login.css"/>
+</head>
+<body>
+
+<a href="#main-form" class="skip-link">Skip to sign-in form</a>
+<div class="layout">
+
+<!-- LEFT PANEL -->
+<aside class="left-panel" aria-hidden="true">
+  <div class="lp-logo">
+    <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+      <circle cx="20" cy="20" r="20" fill="#6c4fbf"/>
+      <polygon points="15.2,6.5 17.7,8 17.7,11 15.2,12.5 12.7,11 12.7,8" fill="#f9c74f" opacity=".85" stroke="#d4930a" stroke-width=".5"/>
+      <polygon points="22.2,6.5 24.7,8 24.7,11 22.2,12.5 19.7,11 19.7,8" fill="#f9c74f" opacity=".85" stroke="#d4930a" stroke-width=".5"/>
+      <path d="M19.5,8 C16.5,8 12,9.5 10,13 C8,16.5 8.5,21 10.5,23.5 C12,25.5 14.5,27 17,26.5 C17.8,26.35 19.5,25.5 19.5,24 Z" fill="#ede8f5" opacity=".75"/>
+      <path d="M20.5,8 C23.5,8 28,9.5 30,13 C32,16.5 31.5,21 29.5,23.5 C28,25.5 25.5,27 23,26.5 C22.2,26.35 20.5,25.5 20.5,24 Z" fill="#ddd5f5" opacity=".75"/>
+      <circle cx="17" cy="17" r="2" fill="#3d1fa0"/><circle cx="23" cy="17" r="2" fill="#3d1fa0"/>
+      <circle cx="17.6" cy="16.5" r=".75" fill="white"/><circle cx="23.6" cy="16.5" r=".75" fill="white"/>
+      <path d="M18,21 Q20,22.5 22,21" stroke="#3d1fa0" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+    </svg>
+    <span class="lp-logo-name">Hivemind</span>
+  </div>
+
+  <div class="lp-body">
+    <div>
+      <div class="lp-tag"><span class="lp-dot"></span> Patient Portal</div>
+      <h2 class="lp-heading" style="margin-top:14px;">Your well-being,<br/><em>in your hands</em></h2>
+      <p class="lp-sub" style="margin-top:10px;">Book sessions, track your therapy journey, and stay connected with your specialist — privately and securely.</p>
+    </div>
+    <div class="lp-quote">
+      <span class="lp-qmark">"</span>
+      <p class="lp-qtext">I found a therapist in Malappuram within minutes. The whole process felt genuinely caring, not clinical.</p>
+      <div class="lp-qauthor">
+        <div class="lp-av">R</div>
+        <div><div class="lp-aname">Ranya M.</div><div class="lp-aloc">Malappuram, Kerala</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lp-trust">
+    <div class="lp-titem">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span><strong>End-to-end confidential</strong> — your data is never shared</span>
+    </div>
+    <div class="lp-titem">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6"/></svg>
+      <span><strong>50+ verified</strong> specialists across Kerala</span>
+    </div>
+    <div class="lp-titem">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span><strong>Free cancellation</strong> up to 2 hours before your session</span>
+    </div>
+  </div>
+</aside>
+
+<!-- RIGHT PANEL -->
+<main class="right-panel" id="main-form" role="main">
+  <a href="hivemind_upgraded.html" class="back-home">
+    <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    Back to site
+  </a>
+
+  <div class="mobile-logo" aria-hidden="true">
+    <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="20" fill="#6c4fbf"/><path d="M19.5,8 C16.5,8 12,9.5 10,13 C8,16.5 8.5,21 10.5,23.5 C12,25.5 14.5,27 17,26.5 C17.8,26.35 19.5,25.5 19.5,24 Z" fill="#ede8f5" opacity=".75"/><path d="M20.5,8 C23.5,8 28,9.5 30,13 C32,16.5 31.5,21 29.5,23.5 C28,25.5 25.5,27 23,26.5 C22.2,26.35 20.5,25.5 20.5,24 Z" fill="#ddd5f5" opacity=".75"/><circle cx="17" cy="17" r="2" fill="#3d1fa0"/><circle cx="23" cy="17" r="2" fill="#3d1fa0"/><path d="M18,21 Q20,22.5 22,21" stroke="#3d1fa0" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
+    <span class="mobile-logo-name">Hivemind</span>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="auth-view active" id="view-login">
+    <div class="form-kicker">Patient Portal</div>
+    <h1 class="form-heading">Welcome back</h1>
+    <p class="form-subhead">Sign in to manage your appointments.</p>
+
+    <div class="alert alert-error" id="login-alert" role="alert" aria-live="assertive">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <div>
+        <span id="login-alert-txt"></span>
+        <div id="resend-confirm-row" style="display:none;margin-top:6px;">
+          <button onclick="resendConfirmation()" style="background:none;border:none;color:var(--brand);font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;">
+            Resend verification code →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-label"><label for="login-email">Email address</label></div>
+      <div class="input-wrap">
+        <svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input class="field-input" id="login-email" type="email" placeholder="you@email.com" autocomplete="email" aria-required="true" aria-describedby="login-email-err"/>
+      </div>
+      <div class="field-msg is-error" id="login-email-err" role="alert"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Enter a valid email address.</div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-label">
+        <label for="login-pw">Password</label>
+        <span class="form-label-hint" onclick="switchView('forgot')" role="button" tabindex="0">Forgot password?</span>
+      </div>
+      <div class="input-wrap">
+        <svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input class="field-input has-right" id="login-pw" type="password" placeholder="••••••••" autocomplete="current-password" aria-required="true" aria-describedby="login-pw-err"/>
+        <svg class="input-icon right" id="eye-login" width="15" height="15" fill="none" viewBox="0 0 24 24" onclick="toggleEye('login-pw','eye-login')" tabindex="0" role="button" aria-label="Toggle password visibility"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+      </div>
+      <div class="field-msg is-error" id="login-pw-err" role="alert"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Password must be at least 6 characters.</div>
+    </div>
+
+
+
+    <div class="form-group check-group" style="margin-bottom:18px;">
+      <input type="checkbox" id="remember-me" onchange="window._rememberMe = this.checked"/>
+      <label for="remember-me">Keep me signed in on this device</label>
+    </div>
+
+    <button class="cta-btn" id="login-btn" onclick="doLogin()">
+      Sign in to your account
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <div class="or-row"><span>or continue with</span></div>
+    <div class="alt-methods">
+      <button class="alt-btn" id="google-btn" onclick="doSocial('google')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+
+    </div>
+
+    <div class="privacy-line">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Your information is encrypted and never shared with third parties.
+    </div>
+
+    <div class="switch-row">New to Hivemind? <span class="switch-link" onclick="switchView('register')" tabindex="0" role="button">Create a free account</span></div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="auth-view" id="view-register">
+    <div class="form-kicker">Create Account</div>
+    <h1 class="form-heading">Join Hivemind</h1>
+    <p class="form-subhead">Free to sign up. Book your first session in minutes.</p>
+
+    <div class="reg-steps" aria-label="Registration progress">
+      <div class="reg-step"><div class="reg-circle active" id="rc1">1</div><div class="reg-step-lbl active" id="rl1">Account</div></div>
+      <div class="reg-line" id="rln1"></div>
+      <div class="reg-step"><div class="reg-circle" id="rc2">2</div><div class="reg-step-lbl" id="rl2">Details</div></div>
+      <div class="reg-line" id="rln2"></div>
+      <div class="reg-step"><div class="reg-circle" id="rc3">3</div><div class="reg-step-lbl" id="rl3">Verify</div></div>
+    </div>
+
+    <div class="alert alert-error" id="reg-alert" role="alert" aria-live="assertive">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span id="reg-alert-txt"></span>
+    </div>
+
+    <!-- Pane 1 -->
+    <div class="reg-pane active" id="rp1">
+      <div class="form-group">
+        <div class="form-label"><label for="r-email">Email address <span aria-hidden="true" style="color:var(--rose)">*</span></label></div>
+        <div class="input-wrap">
+          <svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input class="field-input" id="r-email" type="email" placeholder="you@email.com" autocomplete="email" aria-required="true" oninput="liveEmail('r-email','r-email-err')"/>
+        </div>
+        <div class="field-msg is-error" id="r-email-err" role="alert">Enter a valid email address.</div>
+      </div>
+      <div class="form-group">
+        <div class="form-label"><label for="r-pw">Password <span aria-hidden="true" style="color:var(--rose)">*</span></label></div>
+        <div class="input-wrap">
+          <svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input class="field-input has-right" id="r-pw" type="password" placeholder="Min. 8 characters" autocomplete="new-password" aria-required="true" oninput="liveStrength(this.value)"/>
+          <svg class="input-icon right" id="eye-rpw" width="15" height="15" fill="none" viewBox="0 0 24 24" onclick="toggleEye('r-pw','eye-rpw')" tabindex="0" role="button" aria-label="Toggle password visibility"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div class="strength-wrap" id="strength-wrap"><div class="strength-track"><div class="strength-bar" id="strength-bar"></div></div><div class="strength-text" id="strength-text"></div></div>
+        <div class="field-msg is-error" id="r-pw-err" role="alert">Use at least 8 characters.</div>
+      </div>
+      <div class="form-group">
+        <div class="form-label"><label for="r-confirm">Confirm password <span aria-hidden="true" style="color:var(--rose)">*</span></label></div>
+        <div class="input-wrap">
+          <svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input class="field-input has-right" id="r-confirm" type="password" placeholder="Re-enter password" autocomplete="new-password" aria-required="true" oninput="liveConfirm()"/>
+          <svg class="input-icon right" id="eye-rcon" width="15" height="15" fill="none" viewBox="0 0 24 24" onclick="toggleEye('r-confirm','eye-rcon')" tabindex="0" role="button" aria-label="Toggle confirm password visibility"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+        </div>
+        <div class="field-msg is-error" id="r-confirm-err" role="alert">Passwords don't match.</div>
+        <div class="field-msg is-success" id="r-confirm-ok" role="status"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Looks good!</div>
+      </div>
+      <div class="form-group check-group" style="margin-bottom:18px;">
+        <input type="checkbox" id="r-terms" aria-required="true"/>
+        <label for="r-terms">I agree to the <a href="#" onclick="return false">Terms of Service</a> and <a href="#" onclick="return false">Privacy Policy</a></label>
+      </div>
+      <button class="cta-btn" onclick="regStep(1)">Continue →</button>
+      <div class="switch-row">Already have an account? <span class="switch-link" onclick="switchView('login')" tabindex="0" role="button">Sign in</span></div>
+    </div>
+
+    <!-- Pane 2 -->
+    <div class="reg-pane" id="rp2">
+      <div class="two-col">
+        <div class="form-group">
+          <div class="form-label"><label for="r-fname">First name <span aria-hidden="true" style="color:var(--rose)">*</span></label></div>
+          <div class="input-wrap"><svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/></svg><input class="field-input" id="r-fname" type="text" placeholder="First name" autocomplete="given-name" aria-required="true"/></div>
+          <div class="field-msg is-error" id="r-fname-err" role="alert">Required.</div>
+        </div>
+        <div class="form-group">
+          <div class="form-label"><label for="r-lname">Last name <span aria-hidden="true" style="color:var(--rose)">*</span></label></div>
+          <div class="input-wrap"><svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/></svg><input class="field-input" id="r-lname" type="text" placeholder="Last name" autocomplete="family-name" aria-required="true"/></div>
+          <div class="field-msg is-error" id="r-lname-err" role="alert">Required.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-label"><label for="r-phone">Phone number <span aria-hidden="true" style="color:var(--rose)">*</span></label></div>
+        <div class="input-wrap"><svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.07 2.18 2 2 0 012.06 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input class="field-input" id="r-phone" type="tel" placeholder="+91 94470 00000" autocomplete="tel" aria-required="true"/></div>
+        <div class="field-msg is-error" id="r-phone-err" role="alert">Enter a valid phone number.</div>
+      </div>
+      <div class="form-group">
+        <div class="form-label"><label for="r-dob">Date of birth <span style="color:var(--ink-faint);font-weight:400;font-size:.73rem;">(optional)</span></label></div>
+        <div class="input-wrap"><svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input class="field-input" id="r-dob" type="date" autocomplete="bday"/></div>
+      </div>
+      <div class="privacy-note"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><p>Your details are only shared with your chosen specialist, never stored beyond your session.</p></div>
+      <div class="two-btns"><button class="back-btn" onclick="regStep(2,'back')">← Back</button><button class="cta-btn" onclick="regStep(2)">Continue →</button></div>
+    </div>
+
+    <!-- Pane 3 OTP -->
+    <div class="reg-pane" id="rp3">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="width:52px;height:52px;border-radius:14px;background:var(--brand-lt);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;"><svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#6c4fbf" stroke-width="1.8"/><polyline points="22,6 12,13 2,6" stroke="#6c4fbf" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <p style="font-size:.855rem;color:var(--ink-soft);line-height:1.6;">We sent an 8-digit code to<br/><strong style="color:var(--ink);" id="otp-email-show"></strong></p>
+        
+      </div>
+      <div style="margin:16px 0;">
+        <input class="field-input" id="otp-single"
+          type="text" inputmode="numeric"
+          placeholder="Enter 8-digit code from your email"
+          maxlength="8"
+          style="text-align:center;font-size:1.4rem;font-family:'DM Serif Display',serif;letter-spacing:8px;padding:14px 16px;"
+          aria-label="Verification code"
+          oninput="this.value=this.value.replace(/\D/g,'')"/>
+      </div>
+      <div class="alert alert-error" id="otp-alert" role="alert" aria-live="assertive"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="otp-alert-txt"></span></div>
+      <button class="cta-btn" id="verify-btn" onclick="doVerify()" style="margin-top:4px;">Verify &amp; create account</button>
+      <div class="resend-row">Didn't get it? <button class="resend-btn" id="resend-btn" onclick="doResend()" disabled>Resend in <span class="resend-timer" id="resend-timer">60s</span></button></div>
+      <div style="text-align:center;margin-top:12px;"><button class="back-btn" onclick="goChangeEmail()" style="display:inline-flex;margin:0 auto;">← Change email</button></div>
+    </div>
+  </div>
+
+  <!-- FORGOT -->
+  <div class="auth-view" id="view-forgot">
+    <div class="reg-pane active" id="fp-a">
+      <button class="back-btn" onclick="switchView('login')" style="margin-bottom:18px;">← Back to sign in</button>
+      <div class="form-kicker">Password Reset</div>
+      <h1 class="form-heading">Forgot your password?</h1>
+      <p class="form-subhead">Enter your email and we'll send a secure reset link.</p>
+      <div class="alert alert-error" id="forgot-alert" role="alert" aria-live="assertive"><svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="forgot-alert-txt"></span></div>
+      <div class="form-group">
+        <div class="form-label"><label for="forgot-email">Email address</label></div>
+        <div class="input-wrap"><svg class="input-icon" width="15" height="15" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.8"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input class="field-input" id="forgot-email" type="email" placeholder="you@email.com" autocomplete="email" aria-required="true"/></div>
+        <div class="field-msg is-error" id="forgot-email-err" role="alert">Enter a valid email address.</div>
+      </div>
+      <button class="cta-btn" id="forgot-btn" onclick="doForgot()">Send reset link</button>
+      <div class="switch-row">Remembered it? <span class="switch-link" onclick="switchView('login')" tabindex="0" role="button">Sign in</span></div>
+    </div>
+    <div class="reg-pane" id="fp-b">
+      <div style="text-align:center;padding:8px 0;">
+        <div style="width:60px;height:60px;border-radius:50%;background:var(--brand-lt);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;animation:pop .45s both;"><svg width="26" height="26" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#6c4fbf" stroke-width="1.8"/><path d="M5 13l4 4L19 7" stroke="#6c4fbf" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h2 style="font-size:1.45rem;margin-bottom:8px;">Check your inbox</h2>
+        <p style="color:var(--ink-soft);font-size:.855rem;line-height:1.65;margin-bottom:22px;">Reset link sent to <strong id="forgot-sent-to" style="color:var(--ink);"></strong>.<br/><span style="font-size:.78rem;color:var(--ink-faint);">Expires in 30 minutes.</span></p>
+        <button class="cta-btn" style="max-width:260px;margin:0 auto;" onclick="switchView('login')">← Back to sign in</button>
+        <div class="switch-row"><span class="switch-link" onclick="doForgot()" tabindex="0" role="button">Resend email</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="auth-view" id="view-success">
+    <div class="success-screen">
+      <div class="success-icon"><svg width="32" height="32" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#3d9e78" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="user-pill" id="user-pill"><div class="user-pill-av" id="user-av"></div><span class="user-pill-name" id="user-name-disp"></span></div>
+      <h2>You're signed in!</h2>
+      <p>Your next appointment is just a click away. Welcome back to Hivemind.</p>
+      <a href="hivemind_upgraded.html" class="cta-btn" style="text-decoration:none;max-width:260px;margin:0 auto;display:flex;">Go to your dashboard →</a>
+      <button onclick="doLogout()" style="margin-top:14px;background:none;border:1.5px solid #ddd6f0;border-radius:10px;padding:11px 24px;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;color:#7c6bb0;cursor:pointer;display:flex;align-items:center;gap:7px;margin-left:auto;margin-right:auto;transition:all .18s;" onmouseover="this.style.borderColor='#c0392b';this.style.color='#c0392b'" onmouseout="this.style.borderColor='#ddd6f0';this.style.color='#7c6bb0'">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sign out
+      </button>
+    </div>
+  </div>
+
+  <div class="auth-footer">
+    <a href="hivemind_upgraded.html">hivemind.in</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:hivemindkerala@gmail.com">Contact</a>
+  </div>
+</main>
+</div>
+
+<!-- All JavaScript in js/login.js -->
+<script type="module" src="js/login.js"></script>
+</body>
+</html>
