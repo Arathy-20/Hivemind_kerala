@@ -39,6 +39,11 @@ function applyNav(name) {
    updates the nav bar accordingly.
    ────────────────────────────────────────────────────────────────── */
 export async function checkAuth() {
+  // Clean up the URL after Google OAuth redirect
+  // Supabase puts #access_token=... in the URL which looks messy
+  if (window.location.hash.includes('access_token')) {
+    window.history.replaceState(null, '', window.location.pathname);
+  }
   // 1. URL param — freshly redirected from email/OTP login
   try {
     const params  = new URLSearchParams(window.location.search);
