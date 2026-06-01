@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Hivemind</title>
+</head>
+<body>
+<script>
+  /*
+   * index.html — Smart redirect (entry point)
+   *
+   * This is the first page the browser hits.
+   * It decides where to send the user:
+   *   → If "Remember Me" was checked on last login → go straight to homepage
+   *   → Otherwise → go to login page
+   *
+   * Why here and not in the homepage?
+   * Because if we redirect from the homepage, there's a visible flash.
+   * This blank page redirects instantly before anything renders.
+   */
+  try {
+    const remembered  = localStorage.getItem('hm_user');
+    const rememberFlag = localStorage.getItem('hm_remember');
+
+    if (remembered && rememberFlag) {
+      // User chose "Keep me signed in" — skip login
+      window.location.replace('home.html?user=' + encodeURIComponent(remembered));
+    } else {
+      window.location.replace('login.html');
+    }
+  } catch (e) {
+    // If localStorage is blocked (private browsing), go to login
+    window.location.replace('login.html');
+  }
+</script>
+</body>
+</html>

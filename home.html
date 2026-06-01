@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<!-- ═══════════════════════════════════════════════════════════════════════
+     HIVEMIND — Mental Health Platform  |  Production-Ready Frontend
+     ── UPGRADED from static UI prototype to full product-level frontend ──
+     Changes overview:
+       • Mock API layer with realistic doctor data (replaces Supabase)
+       • Smart search + specialty / rating / availability filters + sorting
+       • Enhanced doctor cards: rating, reviews, price, certifications, verified badge
+       • Multi-step booking flow (4 steps) with progress indicator
+       • Skeleton loaders replacing spinner
+       • "How It Works" section (new)
+       • Full accessibility: aria-labels, focus styles, keyboard nav
+       • SEO: meta description, OG tags, JSON-LD structured data
+       • Lazy image loading, debounced search, no unnecessary reflows
+     ═══════════════════════════════════════════════════════════════════════ -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- ── SEO: NEW ── -->
+  <title>Hivemind — Mental Health Experts in Kerala | Book Online</title>
+  <meta name="description" content="Find and book trusted psychologists, counsellors and therapists in Malappuram, Kerala. Verified specialists, instant booking, confidential consultations."/>
+  <meta name="keywords" content="mental health Kerala, psychologist Malappuram, counsellor Kerala, therapy booking, Hivemind"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://hivemind.in/"/>
+
+  <!-- ── OG TAGS: NEW ── -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Hivemind — Mental Health Experts in Kerala"/>
+  <meta property="og:description" content="Book verified psychologists and therapists in Malappuram, Kerala. Instant online booking."/>
+  <meta property="og:url" content="https://hivemind.in/"/>
+  <meta property="og:image" content="https://hivemind.in/og-image.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Hivemind — Mental Health Experts in Kerala"/>
+  <meta name="twitter:description" content="Book verified psychologists and therapists in Kerala. Instant online booking."/>
+
+  <!-- ── JSON-LD STRUCTURED DATA: NEW ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "Hivemind",
+    "description": "Mental health booking platform connecting patients with verified specialists in Kerala, India.",
+    "url": "https://hivemind.in",
+    "areaServed": { "@type": "State", "name": "Kerala" },
+    "address": { "@type": "PostalAddress", "addressLocality": "Malappuram", "addressRegion": "Kerala", "addressCountry": "IN" },
+    "telephone": "+917736909085",
+    "email": "hivemindkerala@gmail.com",
+    "medicalSpecialty": ["Psychology", "Psychiatry", "Counseling", "Therapy"]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="css/styles.css"/>
+
+  <!-- ── NO INLINE STYLES — all styles are in css/styles.css ── -->
+</head>
+<body>
+
+<!-- Accessibility skip link: NEW -->
+<a href="#doctors" class="skip-link">Skip to specialists</a>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header role="banner">
+  <div class="nav-wrap">
+    <a class="logo" onclick="showPage('home')" role="link" aria-label="Hivemind home" tabindex="0">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="20" fill="#6c4fbf"/>
+        <polygon points="15.2,6.5 17.7,8 17.7,11 15.2,12.5 12.7,11 12.7,8" fill="#f9c74f" opacity="0.82" stroke="#d4930a" stroke-width="0.5"/>
+        <polygon points="22.2,6.5 24.7,8 24.7,11 22.2,12.5 19.7,11 19.7,8" fill="#f9c74f" opacity="0.82" stroke="#d4930a" stroke-width="0.5"/>
+        <path d="M19.5,8 C16.5,8 12,9.5 10,13 C8,16.5 8.5,21 10.5,23.5 C12,25.5 14.5,27 17,26.5 C17.8,26.35 19.5,25.5 19.5,24 Z" fill="#ede8f5" opacity="0.75"/>
+        <path d="M20.5,8 C23.5,8 28,9.5 30,13 C32,16.5 31.5,21 29.5,23.5 C28,25.5 25.5,27 23,26.5 C22.2,26.35 20.5,25.5 20.5,24 Z" fill="#ddd5f5" opacity="0.75"/>
+        <circle cx="17" cy="17" r="2" fill="#3d1fa0"/><circle cx="23" cy="17" r="2" fill="#3d1fa0"/>
+        <circle cx="17.6" cy="16.5" r="0.75" fill="white"/><circle cx="23.6" cy="16.5" r="0.75" fill="white"/>
+        <path d="M18,21 Q20,22.5 22,21" stroke="#3d1fa0" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="logo-name">Hivemind</span>
+    </a>
+    <nav role="navigation" aria-label="Main navigation">
+      <span class="nav-link" onclick="showPage('home'); scrollToId('why')" tabindex="0" role="button">Why Hivemind</span>
+      <span class="nav-link" onclick="showPage('home'); scrollToId('how')" tabindex="0" role="button">How It Works</span>
+      <span class="nav-link" onclick="showPage('home'); scrollToId('doctors')" tabindex="0" role="button">Specialists</span>
+      <span class="nav-link" onclick="showPage('home'); scrollToId('mission')" tabindex="0" role="button">Our Mission</span>
+      <span class="nav-link" onclick="showPage('home'); scrollToId('contact')" tabindex="0" role="button">Contact</span>
+    </nav>
+    <!-- Shown when NOT logged in -->
+    <a href="login.html" class="btn btn-primary" id="nav-login-btn" aria-label="Sign in">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Sign In
+    </a>
+    <!-- Shown when logged in -->
+    <div class="user-nav" id="user-nav" aria-label="Logged in user">
+      <div class="user-nav-avatar" id="nav-avatar">A</div>
+      <span class="user-nav-name" id="nav-username"></span>
+      <button class="logout-btn" onclick="doLogout()" aria-label="Sign out">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Sign out
+      </button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+    <span class="mobile-nav-link" onclick="closeMenu(); showPage('home'); scrollToId('why')" tabindex="0" role="button">Why Hivemind</span>
+    <span class="mobile-nav-link" onclick="closeMenu(); showPage('home'); scrollToId('how')" tabindex="0" role="button">How It Works</span>
+    <span class="mobile-nav-link" onclick="closeMenu(); showPage('home'); scrollToId('doctors')" tabindex="0" role="button">Specialists</span>
+    <span class="mobile-nav-link" onclick="closeMenu(); showPage('home'); scrollToId('mission')" tabindex="0" role="button">Our Mission</span>
+    <span class="mobile-nav-link" onclick="closeMenu(); showPage('home'); scrollToId('contact')" tabindex="0" role="button">Contact</span>
+    <button class="btn btn-primary" style="margin-top:8px;border-radius:12px;" onclick="closeMenu(); showPage('home'); scrollToId('doctors')">Book an Appointment</button>
+  </div>
+</header>
+
+<!-- ═══════════════ HOME PAGE ═══════════════ -->
+<div id="page-home" class="page active" role="main">
+
+  <!-- HERO -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="hero-inner container">
+      <div>
+        <div class="hero-badge" aria-label="Service area">
+          <span class="pulse" aria-hidden="true"></span> Serving Malappuram, Kerala
+        </div>
+        <h1>Discover Mental<br/>Health Experts<br/><em>in Kerala</em></h1>
+        <p class="hero-sub">Find trusted psychologists, counsellors, and therapists in Malappuram. Your mental health journey begins with a single, confident step.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" style="font-size:1rem;padding:14px 28px;" onclick="scrollToId('doctors')" aria-label="Book a therapy session">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Book a Session
+          </button>
+          <button class="btn btn-ghost" style="font-size:1rem;padding:14px 28px;" onclick="scrollToId('how')">How It Works</button>
+        </div>
+        <div class="hero-stats" role="list" aria-label="Platform statistics">
+          <div class="stat" role="listitem"><div class="stat-num">50+</div><div class="stat-label">Specialists</div></div>
+          <div class="stat" role="listitem"><div class="stat-num">2k+</div><div class="stat-label">Sessions Held</div></div>
+          <div class="stat" role="listitem"><div class="stat-num">4.9★</div><div class="stat-label">Patient Rating</div></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-illustration">
+          <svg width="260" height="260" viewBox="0 0 260 260" fill="none">
+            <circle cx="130" cy="130" r="100" fill="white" opacity="0.35"/>
+            <circle cx="130" cy="130" r="70" fill="white" opacity="0.4"/>
+            <path d="M120 90 C100 90 80 100 75 120 C70 140 80 160 95 168 C102 172 115 174 120 168 Z" fill="#c4b0f0" opacity="0.8"/>
+            <path d="M140 90 C160 90 180 100 185 120 C190 140 180 160 165 168 C158 172 145 174 140 168 Z" fill="#a890e0" opacity="0.8"/>
+            <path d="M118 168 Q130 176 142 168" fill="#9070c8" opacity="0.5"/>
+            <line x1="130" y1="90" x2="130" y2="168" stroke="#7850b8" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.5"/>
+            <path d="M90 108 C94 103 100 105 101 110 C102 115 96 117 97 123 C98 129 103 129 104 135" stroke="#8060c0" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M170 108 C166 103 160 105 159 110 C158 115 164 117 163 123 C162 129 157 129 156 135" stroke="#a080d8" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="118" cy="128" r="7.5" fill="#4a3b7a"/><circle cx="142" cy="128" r="7.5" fill="#4a3b7a"/>
+            <circle cx="120" cy="126.5" r="2.8" fill="white"/><circle cx="144" cy="126.5" r="2.8" fill="white"/>
+            <path d="M120 148 Q130 155 140 148" stroke="#4a3b7a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <g opacity="0.4">
+              <polygon points="50,70 56,73.5 56,80.5 50,84 44,80.5 44,73.5" fill="#f9c74f" stroke="#d4930a" stroke-width="0.6"/>
+              <polygon points="210,65 216,68.5 216,75.5 210,79 204,75.5 204,68.5" fill="#f9c74f" stroke="#d4930a" stroke-width="0.6"/>
+              <polygon points="48,178 54,181.5 54,188.5 48,192 42,188.5 42,181.5" fill="#f9c74f" stroke="#d4930a" stroke-width="0.6"/>
+              <polygon points="208,178 214,181.5 214,188.5 208,192 202,188.5 202,181.5" fill="#f9c74f" stroke="#d4930a" stroke-width="0.6"/>
+            </g>
+            <circle cx="42" cy="45" r="2" fill="#f9c74f" opacity="0.6"/>
+            <circle cx="218" cy="42" r="2.5" fill="#f9c74f" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="float-card fc1">
+          <div class="fc-icon" style="background:#d1fae5;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><div style="font-size:.78rem;font-weight:700;color:#1a1030;">Booking Confirmed</div><div style="font-size:.72rem;color:#7c6bb0;">Today, 10:00 AM</div></div>
+        </div>
+        <div class="float-card fc2">
+          <div class="fc-icon" style="background:#ede8f5;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#6c4fbf" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#6c4fbf" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#6c4fbf" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <div><div style="font-size:.78rem;font-weight:700;color:#1a1030;">50+ Specialists</div><div style="font-size:.72rem;color:#7c6bb0;">Available now</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- WHY HIVEMIND -->
+  <section class="why-section" id="why" aria-labelledby="why-heading">
+    <div class="container">
+      <div class="why-grid">
+        <div>
+          <div class="section-label">Why Choose Us</div>
+          <h2 class="section-title" id="why-heading">Mental health care,<br/>designed for Kerala</h2>
+          <p class="section-sub">We bridge the gap between those who need support and the professionals who can provide it — with warmth, dignity, and ease.</p>
+          <div class="why-features">
+            <div class="feature-item">
+              <div class="feature-icon" style="background:#ede8f5;" aria-hidden="true"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7 3H5a2 2 0 00-2 2v16a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2h-2M9 3h6M9 3a2 2 0 000 4h6a2 2 0 000-4" stroke="#6c4fbf" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="feature-text"><h4>Verified Professionals</h4><p>Every specialist on Hivemind is licensed, credential-verified, and peer-reviewed before joining our network.</p></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:#d1fae5;" aria-hidden="true"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#3d9e78" stroke-width="1.8"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke="#3d9e78" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="feature-text"><h4>Instant Booking</h4><p>Real-time availability. Choose your slot, fill in your details, and receive confirmation — all in under 2 minutes.</p></div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:#fef3c7;" aria-hidden="true"><svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#d97706" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="feature-text"><h4>Your Privacy, Protected</h4><p>All consultations and your personal data are handled with the highest standards of confidentiality.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="why-visual" aria-hidden="true">
+          <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="80" fill="white" opacity="0.4"/>
+            <g opacity="0.85">
+              <rect x="55" y="60" width="90" height="110" rx="12" fill="white" stroke="#c4b0f0" stroke-width="1.5"/>
+              <rect x="65" y="74" width="70" height="8" rx="4" fill="#ede8f5"/>
+              <rect x="65" y="88" width="50" height="8" rx="4" fill="#ede8f5"/>
+              <rect x="65" y="102" width="60" height="8" rx="4" fill="#ede8f5"/>
+              <rect x="65" y="116" width="40" height="8" rx="4" fill="#d1fae5"/>
+              <circle cx="152" cy="68" r="22" fill="#d1fae5" stroke="#3d9e78" stroke-width="2"/>
+              <path d="M143 68l5 5 10-10" stroke="#3d9e78" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </svg>
+          <div class="testimonial-card">
+            <div class="tc-stars">★★★★★</div>
+            <p class="tc-text">"Hivemind made it so easy. I found a counsellor in my area within minutes."</p>
+            <div class="tc-author"><div class="tc-avatar">A</div><div class="tc-name">Aysha R., Malappuram</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════
+       HOW IT WORKS — NEW SECTION
+       ══════════════════════════════════ -->
+  <section class="how-section" id="how" aria-labelledby="how-heading">
+    <div class="container">
+      <div style="text-align:center; max-width:560px; margin:0 auto;">
+        <div class="section-label" style="justify-content:center;">Simple Process</div>
+        <h2 class="section-title" id="how-heading">Book your session<br/>in three steps</h2>
+        <p class="section-sub" style="margin:0 auto;">No complicated forms, no long waits. Getting professional support should be as simple as possible.</p>
+      </div>
+      <div class="how-grid" role="list">
+        <div class="how-card" role="listitem">
+          <div class="how-connector" aria-hidden="true"></div>
+          <div class="how-step-num" aria-hidden="true">1</div>
+          <div class="how-icon" style="background:#ede8f5;" aria-hidden="true">
+            <svg width="30" height="30" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="#6c4fbf" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#6c4fbf" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Find Your Specialist</h3>
+          <p>Browse our network of verified psychologists and therapists. Filter by specialty, availability, and rating to find your perfect match.</p>
+        </div>
+        <div class="how-card" role="listitem">
+          <div class="how-connector" aria-hidden="true"></div>
+          <div class="how-step-num" aria-hidden="true">2</div>
+          <div class="how-icon" style="background:#d1fae5;" aria-hidden="true">
+            <svg width="30" height="30" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#3d9e78" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#3d9e78" stroke-width="2" stroke-linecap="round"/><path d="M8 14h.01M12 14h.01M16 14h.01" stroke="#3d9e78" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Book a Slot</h3>
+          <p>Select a date and time that works for you. See real-time availability and confirm your booking instantly — no back-and-forth calls.</p>
+        </div>
+        <div class="how-card" role="listitem">
+          <div class="how-step-num" aria-hidden="true">3</div>
+          <div class="how-icon" style="background:#fef3c7;" aria-hidden="true">
+            <svg width="30" height="30" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#d97706" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#d97706" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#d97706" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Attend Your Session</h3>
+          <p>Show up at the clinic at your confirmed time. Your therapist is briefed, your slot is secured. Focus on your well-being — we handle the rest.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SPECIALISTS -->
+  <section class="doctors-section" id="doctors" aria-labelledby="doctors-heading">
+    <div class="container">
+      <div class="section-label">Our Specialists</div>
+      <h2 class="section-title" id="doctors-heading">Meet your future therapist</h2>
+      <p class="section-sub">Browse our network of licensed mental health professionals, each dedicated to your well-being.</p>
+
+      <!-- ── FILTER BAR: NEW ── -->
+      <div class="filter-bar" role="search" aria-label="Filter specialists">
+        <div class="search-bar-wrap">
+          <svg class="search-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input class="search-bar" type="search" placeholder="Search by name or specialty…" id="searchInput" oninput="filterDoctors()" aria-label="Search specialists"/>
+        </div>
+
+        <select class="filter-select" id="filterSpecialty" onchange="filterDoctors()" aria-label="Filter by specialty">
+          <option value="">All Specialties</option>
+          <option value="psychologist">Psychologist</option>
+          <option value="psychiatrist">Psychiatrist</option>
+          <option value="counsellor">Counsellor</option>
+          <option value="therapist">Therapist</option>
+          <option value="child">Child Specialist</option>
+        </select>
+
+        <button class="filter-chip" id="chip-today" onclick="toggleChip('today')" aria-pressed="false">Available Today</button>
+        <button class="filter-chip" id="chip-rating" onclick="toggleChip('rating')" aria-pressed="false">4★ & Above</button>
+
+        <div class="sort-wrap">
+          <span class="sort-label">Sort:</span>
+          <select class="filter-select" id="sortBy" onchange="filterDoctors()" aria-label="Sort specialists">
+            <option value="default">Default</option>
+            <option value="rating">Top Rated</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="experience">Most Experienced</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="results-count" id="resultsCount" aria-live="polite" aria-atomic="true"></div>
+      <div class="doctors-grid" id="doctorsGrid" role="list" aria-label="Specialists list"></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MISSION -->
+  <section class="mission-section" id="mission" aria-labelledby="mission-heading">
+    <div class="container">
+      <div class="mission-grid">
+        <div class="mission-text">
+          <div class="section-label">Our Mission</div>
+          <h2 class="section-title" id="mission-heading">Normalising care,<br/>one appointment at a time</h2>
+          <p class="section-sub">In Kerala, the conversation around mental health is shifting. We're here to accelerate that change.</p>
+          <div class="mission-points">
+            <div class="mp-item"><div class="mp-num" aria-hidden="true">01</div><div class="mp-text"><h4>Reduce the Stigma</h4><p>We make seeking help feel as natural as visiting a doctor — because it is.</p></div></div>
+            <div class="mp-item"><div class="mp-num" aria-hidden="true">02</div><div class="mp-text"><h4>Local Accessibility</h4><p>Connecting Malappuram and the broader Kerala community with qualified specialists, close to home.</p></div></div>
+            <div class="mp-item"><div class="mp-num" aria-hidden="true">03</div><div class="mp-text"><h4>Empowering Practitioners</h4><p>Helping mental health professionals grow their practice and reach the patients who need them most.</p></div></div>
+          </div>
+        </div>
+        <div class="mission-visual" aria-hidden="true">
+          <div class="mission-hexgrid">
+            <div class="hex-item" style="background:rgba(108,79,191,.18);"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#c4b0f0" stroke-width="1.5"/></svg><span>Care</span></div>
+            <div class="hex-item" style="background:rgba(61,158,120,.18);"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#6ee7b7" stroke-width="1.5"/><circle cx="9" cy="7" r="4" stroke="#6ee7b7" stroke-width="1.5"/></svg><span>Community</span></div>
+            <div class="hex-item" style="background:rgba(232,168,76,.18);"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#fbbf24" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round"/></svg><span>Timely</span></div>
+            <div class="hex-item" style="background:rgba(61,158,120,.15);"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#6ee7b7" stroke-width="1.5"/></svg><span>Safe</span></div>
+            <div class="hex-item" style="background:rgba(108,79,191,.15);"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#c4b0f0" stroke-width="1.8" stroke-linecap="round"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z" stroke="#c4b0f0" stroke-width="1.5"/></svg><span>Verified</span></div>
+            <div class="hex-item" style="background:rgba(224,92,114,.15);"><svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" stroke="#f9a8b8" stroke-width="1.5"/></svg><span>Private</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact" aria-labelledby="contact-heading">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <div class="section-label">Get in Touch</div>
+          <h2 class="section-title" id="contact-heading">We're here to help</h2>
+          <p class="section-sub">Have questions about our platform, or need assistance finding the right specialist? Reach out anytime.</p>
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-ico" aria-hidden="true"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div><h4>Email</h4><a href="#" onclick="openContactPopup(event)" style="color:var(--brand);font-weight:500;">hivemindkerala@gmail.com</a></div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-ico" aria-hidden="true"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.07 2.18 2 2 0 012.06 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div>
+                <h4>Phone</h4>
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;">
+                  <a href="tel:+917736909085" style="display:flex;align-items:center;gap:6px;color:var(--ink);font-weight:500;text-decoration:none;font-size:.95rem;transition:color .18s;" onmouseover="this.style.color='#6c4fbf'" onmouseout="this.style.color='var(--ink)'">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.07 2.18 2 2 0 012.06 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    +91 77369 09085
+                  </a>
+                  <button onclick="copyPhone(this)" style="display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);background:#fff;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:all .18s;position:relative;" onmouseover="this.style.borderColor='#6c4fbf';this.style.color='#6c4fbf'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink-soft)'">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Copy
+                    <span class="copy-tip" style="display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1030;color:#fff;font-size:.7rem;padding:4px 8px;border-radius:6px;white-space:nowrap;">Copied!</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-ico" aria-hidden="true"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="#6c4fbf" stroke-width="1.5"/></svg></div>
+              <div><h4>Location</h4><p>Malappuram, Kerala, India</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-cta-box">
+          <h3>Ready to begin?</h3>
+          <p>Browse our specialists and book your first session today. Taking the first step is always the hardest — we've made it as gentle as possible.</p>
+          <button class="btn-white" onclick="showPage('home'); scrollToId('doctors')" aria-label="Find a specialist">Find a Specialist →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- ═══════════════ BOOKING PAGE ═══════════════ -->
+<div id="page-booking" class="page" role="main" aria-label="Booking flow">
+  <div class="booking-page-inner">
+
+    <!-- Step progress indicator: NEW -->
+    <nav class="booking-steps" aria-label="Booking progress">
+      <div class="step-item">
+        <div class="step-circle active" id="step-circle-1" aria-current="step">1</div>
+        <div class="step-label active" id="step-label-1">Choose Date</div>
+      </div>
+      <div class="step-line" id="step-line-1"></div>
+      <div class="step-item">
+        <div class="step-circle" id="step-circle-2">2</div>
+        <div class="step-label" id="step-label-2">Your Details</div>
+      </div>
+      <div class="step-line" id="step-line-2"></div>
+      <div class="step-item">
+        <div class="step-circle" id="step-circle-3">3</div>
+        <div class="step-label" id="step-label-3">Review</div>
+      </div>
+      <div class="step-line" id="step-line-3"></div>
+      <div class="step-item">
+        <div class="step-circle" id="step-circle-4">4</div>
+        <div class="step-label" id="step-label-4">Confirmed</div>
+      </div>
+    </nav>
+
+    <!-- STEP 1: CALENDAR -->
+    <div id="bview-calendar" class="bview active">
+      <button class="back-link" onclick="showPage('home'); scrollToId('doctors')" aria-label="Go back to specialists">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Specialists
+      </button>
+      <div class="booking-hero" role="region" aria-label="Selected doctor">
+        <img id="calDocPhoto" src="" alt="" loading="lazy"/>
+        <div class="booking-hero-text">
+          <div class="tag-micro">Booking appointment with</div>
+          <h2 id="calDocName"></h2>
+          <p id="calDocSpec"></p>
+        </div>
+      </div>
+      <div class="cal-row">
+        <div class="cal-panel" role="region" aria-label="Date picker">
+          <div class="cal-nav-row">
+            <button class="cal-nav-btn" onclick="prevMonth()" aria-label="Previous month">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <span class="cal-month" id="calMonthYear" aria-live="polite"></span>
+            <button class="cal-nav-btn" onclick="nextMonth()" aria-label="Next month">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="cal-weekdays" role="row" aria-label="Days of the week">
+            <div class="cal-wd" role="columnheader" abbr="Sunday">Su</div>
+            <div class="cal-wd" role="columnheader" abbr="Monday">Mo</div>
+            <div class="cal-wd" role="columnheader" abbr="Tuesday">Tu</div>
+            <div class="cal-wd" role="columnheader" abbr="Wednesday">We</div>
+            <div class="cal-wd" role="columnheader" abbr="Thursday">Th</div>
+            <div class="cal-wd" role="columnheader" abbr="Friday">Fr</div>
+            <div class="cal-wd" role="columnheader" abbr="Saturday">Sa</div>
+          </div>
+          <div class="cal-grid" id="calGrid" role="grid" aria-label="Select a date"></div>
+        </div>
+        <div class="slots-panel" role="region" aria-label="Available time slots">
+          <div class="slots-title">Available Times</div>
+          <div class="slots-date" id="slotDateLabel">Select a date to view slots</div>
+          <div class="slots-list" id="slotsContainer" aria-live="polite">
+            <div class="slots-empty">
+              <svg width="44" height="44" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v4l3 3" stroke="#b8aed4" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#b8aed4" stroke-width="1.5"/></svg>
+              <p>Pick a date from the calendar</p>
+            </div>
+          </div>
+          <div class="slots-legend" aria-label="Slot legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#10b981;" aria-hidden="true"></div>Available</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ef4444;" aria-hidden="true"></div>Booked</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: PATIENT DETAILS FORM -->
+    <div id="bview-form" class="bview">
+      <button class="back-link" onclick="showBview('calendar'); setStep(1)" aria-label="Go back to date selection">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Change time slot
+      </button>
+      <div class="bform-card" role="form" aria-label="Patient details">
+        <div class="bform-header">
+          <div class="pretag">Step 2 of 4 — Your Details</div>
+          <h2>Enter your details</h2>
+          <div class="bform-summary" aria-label="Booking summary">
+            <div class="bfs-row"><span class="bfs-label">Doctor</span><span class="bfs-val" id="formDocName"></span></div>
+            <div class="bfs-row"><span class="bfs-label">Date</span><span class="bfs-val" id="formDate"></span></div>
+            <div class="bfs-row"><span class="bfs-label">Time</span><span class="bfs-val" id="formTime"></span></div>
+          </div>
+        </div>
+        <div class="bform-body">
+          <div class="form-group">
+            <label for="patientName">Full Name <span style="color:var(--rose)">*</span></label>
+            <input class="form-input" id="patientName" type="text" placeholder="e.g. Aysha Rahman" autocomplete="name" aria-required="true" aria-describedby="nameError"/>
+            <div class="field-error" id="nameError" role="alert">Please enter your full name.</div>
+          </div>
+          <div class="form-group">
+            <label for="patientPhone">Phone Number <span style="color:var(--rose)">*</span></label>
+            <input class="form-input" id="patientPhone" type="tel" placeholder="e.g. +91 94470 00000" autocomplete="tel" aria-required="true" aria-describedby="phoneError"/>
+            <div class="field-error" id="phoneError" role="alert">Please enter a valid phone number.</div>
+          </div>
+          <div class="form-group">
+            <label for="patientEmail">Email Address <span style="color:var(--ink-faint);font-weight:400;">(optional)</span></label>
+            <input class="form-input" id="patientEmail" type="email" placeholder="e.g. aysha@email.com" autocomplete="email" aria-describedby="emailError"/>
+            <div class="field-error" id="emailError" role="alert">Please enter a valid email address.</div>
+          </div>
+          <div class="form-group">
+            <label for="patientNote">Note for Doctor <span style="color:var(--ink-faint);font-weight:400;">(optional)</span></label>
+            <textarea class="form-input" id="patientNote" placeholder="Brief description of what you'd like to discuss…" rows="3" style="resize:vertical;" aria-label="Note for the doctor"></textarea>
+          </div>
+          <div class="form-error" id="formError" role="alert"></div>
+          <button class="book-btn" id="continueBtn" onclick="goToReview()" aria-label="Continue to review">Continue to Review →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: REVIEW / SUMMARY: NEW -->
+    <div id="bview-review" class="bview">
+      <button class="back-link" onclick="showBview('form'); setStep(2)" aria-label="Go back to details">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Edit details
+      </button>
+      <div class="booking-summary-card" role="region" aria-label="Booking review">
+        <div style="margin-bottom:20px;">
+          <div class="pretag" style="color:var(--brand);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Step 3 of 4 — Review</div>
+          <h2 style="font-size:1.7rem;">Confirm your booking</h2>
+          <p style="color:var(--ink-soft);font-size:.9rem;margin-top:6px;font-weight:300;">Please review the details below before confirming.</p>
+        </div>
+        <div id="reviewContent"></div>
+        <div class="form-error" id="reviewError" role="alert" style="margin-top:12px;"></div>
+        <button class="book-btn" id="confirmBtn" onclick="confirmBooking()" style="margin-top:20px;" aria-label="Confirm and book appointment">
+          Confirm Appointment
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 4: SUCCESS -->
+    <div id="bview-success" class="bview">
+      <div class="success-wrap" role="region" aria-label="Booking confirmed">
+        <div class="success-icon" aria-hidden="true">
+          <svg width="38" height="38" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="booking-ref" id="bookingRef" aria-label="Booking reference number">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 000 4h6a2 2 0 000-4M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="bookingRefNum"></span>
+        </div>
+        <h2>Booking Confirmed!</h2>
+        <p id="successMsg"></p>
+        <div class="success-receipt" aria-label="Booking receipt">
+          <div class="receipt-row"><span class="receipt-label">Patient</span><span class="receipt-val" id="sPatient"></span></div>
+          <div class="receipt-row"><span class="receipt-label">Doctor</span><span class="receipt-val" id="sDoctor"></span></div>
+          <div class="receipt-row"><span class="receipt-label">Date</span><span class="receipt-val" id="sDate"></span></div>
+          <div class="receipt-row"><span class="receipt-label">Time</span><span class="receipt-val" id="sTime"></span></div>
+          <div class="receipt-row"><span class="receipt-label">Fee</span><span class="receipt-val" id="sFee" style="color:var(--brand);"></span></div>
+          <div class="receipt-row"><span class="receipt-label">Location</span><span class="receipt-val" id="sLocation"></span></div>
+        </div>
+        <div class="success-actions">
+          <button class="btn btn-ghost" onclick="showPage('home')" aria-label="Return to home page">← Back to Home</button>
+          <button class="btn btn-primary" onclick="showPage('home'); scrollToId('doctors')" aria-label="Book another appointment">Book Another</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" onclick="showPage('home')" role="link" aria-label="Hivemind home" tabindex="0">
+          <svg width="34" height="34" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="#9b7fd4"/><path d="M19.5,8 C16.5,8 12,9.5 10,13 C8,16.5 8.5,21 10.5,23.5 C12,25.5 14.5,27 17,26.5 C17.8,26.35 19.5,25.5 19.5,24 Z" fill="#ede8f5" opacity="0.75"/><path d="M20.5,8 C23.5,8 28,9.5 30,13 C32,16.5 31.5,21 29.5,23.5 C28,25.5 25.5,27 23,26.5 C22.2,26.35 20.5,25.5 20.5,24 Z" fill="#ddd5f5" opacity="0.75"/><circle cx="17" cy="17" r="2" fill="#3d1fa0"/><circle cx="23" cy="17" r="2" fill="#3d1fa0"/><circle cx="17.6" cy="16.5" r="0.75" fill="white"/><circle cx="23.6" cy="16.5" r="0.75" fill="white"/><path d="M18,21 Q20,22.5 22,21" stroke="#3d1fa0" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
+          <span class="logo-name">Hivemind</span>
+        </div>
+        <p class="footer-tagline">Mental health care, made accessible for Kerala. Find your specialist today.</p>
+      </div>
+      <div class="footer-links">
+        <h5>Navigate</h5>
+        <ul>
+          <li><span onclick="showPage('home')" tabindex="0" role="button">Home</span></li>
+          <li><span onclick="showPage('home'); scrollToId('why')" tabindex="0" role="button">Why Hivemind</span></li>
+          <li><span onclick="showPage('home'); scrollToId('how')" tabindex="0" role="button">How It Works</span></li>
+          <li><span onclick="showPage('home'); scrollToId('doctors')" tabindex="0" role="button">Specialists</span></li>
+          <li><span onclick="showPage('home'); scrollToId('contact')" tabindex="0" role="button">Contact</span></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h5>Legal</h5>
+        <ul>
+          <li><span tabindex="0" role="button">Privacy Policy</span></li>
+          <li><span tabindex="0" role="button">Terms of Service</span></li>
+          <li><span tabindex="0" role="button">Disclaimer</span></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="#" onclick="openContactPopup(event)">hivemindkerala@gmail.com</a></li>
+          <li><a href="tel:+917736909085">+91 77369 09085</a></li>
+          <li><span>Malappuram, Kerala</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Hivemind · Mental Health, Made Accessible · Malappuram, Kerala</p>
+      <div class="footer-socials" aria-label="Social media links">
+        <div class="social-btn" role="button" tabindex="0" aria-label="Instagram"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" stroke="currentColor" stroke-width="1.8"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="social-btn" role="button" tabindex="0" aria-label="Facebook"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="social-btn" role="button" tabindex="0" aria-label="Twitter"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     SCRIPTS
+     Plain script first (globals for onclick attrs),
+     then module script (data + business logic)
+     ═══════════════════════════════════════════════════════ -->
+<script>
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   INLINE SCRIPT — Navigation helpers + module stubs
+   ──────────────────────────────────────────────────────────────────
+   WHY THIS EXISTS AS INLINE (not a separate file):
+   HTML onclick="functionName()" fires immediately when user clicks.
+   External module scripts load asynchronously — they may not be
+   ready when the first click happens.
+
+   Solution: define lightweight stub functions here that call
+   window._functionName, which main.js sets up once it loads.
+   The navigation functions (showPage etc.) are pure DOM — they
+   don't need anything from modules so they're fine here.
+══════════════════════════════════════════════════════════════════ */
+
+/* ── PAGE NAVIGATION ─────────────────────────────────────────────
+   Hivemind is a single-page app: all pages exist in the HTML,
+   only one has class 'active' (display:block) at a time.
+   ────────────────────────────────────────────────────────────────── */
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showBview(name) {
+  document.querySelectorAll('.bview').forEach(v => v.classList.remove('active'));
+  document.getElementById('bview-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function scrollToId(id) {
+  // 60ms delay lets page animation finish before scrolling
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 60);
+}
+
+/* ── MOBILE HAMBURGER MENU ──────────────────────────────────────── */
+function toggleMenu() {
+  const m   = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  m.classList.toggle('open');
+  btn.setAttribute('aria-expanded', m.classList.contains('open'));
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').setAttribute('aria-expanded', 'false');
+}
+
+/* ── STUBS — real logic is in js/main.js (loaded as module) ──────
+   These call window._functionName which main.js assigns on load.
+   ────────────────────────────────────────────────────────────────── */
+function filterDoctors()   { window._filterDoctors   && window._filterDoctors();    }
+function toggleChip(id)    { window._toggleChip       && window._toggleChip(id);    }
+function prevMonth()       { window._prevMonth        && window._prevMonth();        }
+function nextMonth()       { window._nextMonth        && window._nextMonth();        }
+function goToReview()      { window._goToReview       && window._goToReview();       }
+function confirmBooking()  { window._confirmBooking   && window._confirmBooking();   }
+function setStep(n)        { window._setStep          && window._setStep(n);         }
+function doLogout()        { window._doLogout         && window._doLogout();         }
+function toggleChat()      { window.toggleChat        && window.toggleChat();        }
+function sendChat()        { window.sendChat          && window.sendChat();          }
+function sendQuick(text)   { window.sendQuick         && window.sendQuick(text);     }
+function openContactPopup(e)  { window.openContactPopup  && window.openContactPopup(e);  }
+function closeContactPopup()  { window.closeContactPopup && window.closeContactPopup(); }
+function copyPhone(btn)       { window.copyPhone         && window.copyPhone(btn);       }
+function submitContactPopup(e){ window.submitContactPopup && window.submitContactPopup(e); }
+
+/* ── Inline auth check (runs before module loads) ─────────────────
+   Shows the user's name in the nav immediately on page load
+   without waiting for Supabase. Reads from sessionStorage/localStorage.
+   ────────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+  function applyNav(name) {
+    const loginBtn  = document.getElementById('nav-login-btn');
+    const userNav   = document.getElementById('user-nav');
+    const navAvatar = document.getElementById('nav-avatar');
+    const navName   = document.getElementById('nav-username');
+    if (loginBtn)  loginBtn.style.display = 'none';
+    if (userNav)   userNav.classList.add('visible');
+    if (navAvatar) navAvatar.textContent = name.charAt(0).toUpperCase();
+    if (navName)   navName.textContent   = name;
+  }
+  try {
+    const params  = new URLSearchParams(window.location.search);
+    const urlName = params.get('user');
+    if (urlName) {
+      const name = decodeURIComponent(urlName);
+      applyNav(name);
+      sessionStorage.setItem('hm_user', name);
+      if (localStorage.getItem('hm_remember')) localStorage.setItem('hm_user', name);
+      return;
+    }
+    const session    = sessionStorage.getItem('hm_user');
+    if (session) { applyNav(session); return; }
+    const remembered = localStorage.getItem('hm_user');
+    if (remembered && localStorage.getItem('hm_remember')) {
+      applyNav(remembered);
+      sessionStorage.setItem('hm_user', remembered);
+    }
+  } catch(e) {}
+});
+</script>
+
+<!-- ── MAIN MODULE — imports and starts the full app ── -->
+<script type="module" src="js/main.js"></script>
+
+</script>
+
+<!-- ── CONTACT POPUP ── -->
+<div id="contact-popup" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(26,16,48,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:36px;width:100%;max-width:420px;margin:20px;box-shadow:0 24px 64px rgba(74,59,122,.2);position:relative;animation:fadeUp .3s cubic-bezier(.16,1,.3,1) both;">
+    <button onclick="closeContactPopup()" style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:#b8aed4;font-size:1.2rem;line-height:1;">✕</button>
+    <div style="margin-bottom:20px;">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6c4fbf;margin-bottom:6px;">Get in Touch</div>
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:#1a1030;margin-bottom:4px;">Send us a message</h3>
+      <p style="font-size:.85rem;color:#7c6bb0;">We'll reply within 24 hours.</p>
+    </div>
+    <div id="popup-success" style="display:none;text-align:center;padding:20px 0;">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" style="margin:0 auto 12px;display:block;"><circle cx="12" cy="12" r="10" fill="#d1fae5"/><path d="M5 13l4 4L19 7" stroke="#3d9e78" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <p style="font-weight:600;color:#1a1030;margin-bottom:4px;">Message sent!</p>
+      <p style="font-size:.85rem;color:#7c6bb0;">We'll get back to you soon.</p>
+    </div>
+    <form id="popup-form" onsubmit="submitContactPopup(event)">
+      <div style="margin-bottom:12px;">
+        <input id="pop-name" type="text" placeholder="Your name" required
+          style="width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #e8e2f4;background:#fafafa;font-family:'DM Sans',sans-serif;font-size:.875rem;color:#1a1030;outline:none;transition:border-color .18s;"
+          onfocus="this.style.borderColor='#6c4fbf'" onblur="this.style.borderColor='#e8e2f4'"/>
+      </div>
+      <div style="margin-bottom:12px;">
+        <input id="pop-email" type="email" placeholder="Your email" required
+          style="width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #e8e2f4;background:#fafafa;font-family:'DM Sans',sans-serif;font-size:.875rem;color:#1a1030;outline:none;transition:border-color .18s;"
+          onfocus="this.style.borderColor='#6c4fbf'" onblur="this.style.borderColor='#e8e2f4'"/>
+      </div>
+      <div style="margin-bottom:16px;">
+        <textarea id="pop-message" placeholder="Your message" required rows="4"
+          style="width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid #e8e2f4;background:#fafafa;font-family:'DM Sans',sans-serif;font-size:.875rem;color:#1a1030;outline:none;resize:none;transition:border-color .18s;"
+          onfocus="this.style.borderColor='#6c4fbf'" onblur="this.style.borderColor='#e8e2f4'"></textarea>
+      </div>
+      <button type="submit" id="pop-btn"
+        style="width:100%;padding:13px;border-radius:10px;background:#6c4fbf;color:#fff;border:none;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.925rem;cursor:pointer;transition:background .18s;">
+        Send Message →
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════ AI CHATBOT ═══════════════ -->
+<!-- Floating button -->
+<button id="hm-chat-btn" onclick="toggleChat()" aria-label="Open Hivemind AI assistant">
+  <span class="hm-chat-badge"></span>
+  <span class="hm-chat-icon" style="display:flex;align-items:center;justify-content:center;">
+    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 10h8M8 14h5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <span class="hm-close-icon" style="align-items:center;justify-content:center;">
+    <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+      <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </span>
+</button>
+
+<!-- Chat window -->
+<div id="hm-chat-window" role="dialog" aria-label="Hivemind AI Assistant" aria-modal="true">
+  <!-- Header -->
+  <div class="hm-chat-header">
+    <div class="hm-chat-avatar">
+      <svg width="20" height="20" fill="none" viewBox="0 0 40 40">
+        <path d="M19.5,8 C16.5,8 12,9.5 10,13 C8,16.5 8.5,21 10.5,23.5 C12,25.5 14.5,27 17,26.5 C17.8,26.35 19.5,25.5 19.5,24 Z" fill="#ede8f5" opacity=".9"/>
+        <path d="M20.5,8 C23.5,8 28,9.5 30,13 C32,16.5 31.5,21 29.5,23.5 C28,25.5 25.5,27 23,26.5 C22.2,26.35 20.5,25.5 20.5,24 Z" fill="#ddd5f5" opacity=".9"/>
+        <circle cx="17" cy="17" r="2" fill="white"/><circle cx="23" cy="17" r="2" fill="white"/>
+        <path d="M18,21 Q20,22.5 22,21" stroke="white" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+    <div class="hm-chat-header-info">
+      <div class="hm-chat-name">Myna · Hivemind AI</div>
+      <div class="hm-chat-status">
+        <span class="hm-status-dot"></span>
+        Here to help you find support
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="hm-chat-messages" id="hm-chat-messages"></div>
+
+  <!-- Quick replies -->
+  <div class="hm-quick-replies" id="hm-quick-replies">
+    <button class="hm-quick-btn" onclick="sendQuick('How do I book an appointment?')">How to book?</button>
+    <button class="hm-quick-btn" onclick="sendQuick('Which therapist is right for me?')">Find therapist</button>
+    <button class="hm-quick-btn" onclick="sendQuick('What does a session cost?')">Session cost</button>
+    <button class="hm-quick-btn" onclick="sendQuick('I am feeling anxious and don\'t know where to start')">I need help</button>
+  </div>
+
+  <!-- Input -->
+  <div class="hm-chat-input-row">
+    <textarea id="hm-chat-input" placeholder="Ask Myna anything…" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+    <button id="hm-chat-send" onclick="sendChat()" aria-label="Send message">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+        <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+</body>
+</html>
