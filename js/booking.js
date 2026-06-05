@@ -18,7 +18,7 @@
 ═══════════════════════════════════════════════════════════════ */
 
 import { supabase, HOURS, MONTHS, DAY_NAMES } from './config.js';
-import { parseAvailableDays, parseExcludedDates, fmtDate, generateRef } from './doctors.js';
+import { parseAvailableDays, parseExcludedDates, fmtDate, generateRef, visibleDoctors } from './doctors.js';
 
 // Shared booking state — tracks what the user has selected so far
 export let currentDoctor = null;
@@ -81,6 +81,9 @@ export function setStep(n) {
      unavailable days (past, wrong weekday, excluded dates) as disabled.
    renderSlots(ds) — shows available time slots for a selected date.
    selectDate(ds) / selectSlot(ds, hour, timeStr) — handle user picks.
+
+   FIX: visibleDoctors is now imported from doctors.js so openCalendar(idx)
+   can correctly look up which doctor the user clicked "Book" on.
    ══════════════════════════════════════════════════════════════════ */
 export function openCalendar(idx) {
   currentDoctor = visibleDoctors[idx];
@@ -221,10 +224,6 @@ export function validateForm() {
 
 /* ══════════════════════════════════════════════════════════════════
    STEP 3 — REVIEW / BOOKING SUMMARY
-   ──────────────────────────────────────────────────────────────────
-   Collects all the booking data (doctor, date, time, patient details)
-   and builds the review card HTML so the user can check everything
-   before confirming. Called when user clicks "Continue to Review".
    ══════════════════════════════════════════════════════════════════ */
 export function goToReview() {
   if (!validateForm()) return;
@@ -261,12 +260,6 @@ export function goToReview() {
 
 /* ══════════════════════════════════════════════════════════════════
    STEP 4 — CONFIRM BOOKING
-   ──────────────────────────────────────────────────────────────────
-   The final step. Called when user clicks "Confirm Appointment".
-   1. Disables the button and shows a spinner (prevents double-submit)
-   2. Calls submitBookingAPI() to save to Supabase
-   3. On success: marks the slot as taken locally, shows success screen
-   4. On failure: shows error message, re-enables the button
    ══════════════════════════════════════════════════════════════════ */
 export async function confirmBooking() {
   const btn = document.getElementById('confirmBtn');
@@ -324,6 +317,3 @@ export async function confirmBooking() {
 
 export function prevMonth(){ currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} selectedDate=null;selectedSlot=null; renderCalendar(); renderSlots(null); }
 export function nextMonth(){ currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} selectedDate=null;selectedSlot=null; renderCalendar(); renderSlots(null); }
-
-// Export navigation helpers so main.js can wire them to window
-export { prevMonth, nextMonth };

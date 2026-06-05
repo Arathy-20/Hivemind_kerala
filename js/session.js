@@ -14,7 +14,7 @@
 
 import { supabase } from './config.js';
 
-export /* ── loadUpcomingSession() ────────────────────────────────────────
+/* ── loadUpcomingSession() ────────────────────────────────────────
    Shows the reminder banner at the top of the homepage if the
    logged-in user has an upcoming appointment.
 
@@ -27,6 +27,7 @@ export /* ── loadUpcomingSession() ─────────────�
    ────────────────────────────────────────────────────────────────── */
 export async function loadUpcomingSession() {
   // Get patient name from storage — used to look up their bookings
+  const patientName = sessionStorage.getItem('hm_user') ||
                       localStorage.getItem('hm_user') ||
                       new URLSearchParams(window.location.search).get('user');
   if (!patientName) return;
@@ -78,12 +79,8 @@ export async function loadUpcomingSession() {
     else countdown = 'Starting now';
 
     // Update the banner
-    document.getElementById('reminder-detail').textContent =
-      `${next.doctor_name} · ${next.doctor_name.includes('Dr') ? '' : 'Session'}`;
-    document.getElementById('reminder-detail').textContent =
-      next.doctor_name;
-    document.getElementById('reminder-time').textContent =
-      `${niceDate} · ${timeStr}`;
+    document.getElementById('reminder-detail').textContent = next.doctor_name;
+    document.getElementById('reminder-time').textContent   = `${niceDate} · ${timeStr}`;
     document.getElementById('reminder-countdown').textContent = countdown;
 
     // Show the banner

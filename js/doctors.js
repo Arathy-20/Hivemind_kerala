@@ -9,7 +9,7 @@
    5. Filter system     — search, specialty filter, chips, sort
 ═══════════════════════════════════════════════════════════════ */
 
-import { supabase, DAY_NAMES } from './config.js';
+import { supabase, DAY_NAMES, HOURS, MONTHS } from './config.js';
 
 /* ── UTILITY HELPERS ─────────────────────────────────────────────
    Small functions used by both doctors.js and booking.js.
@@ -130,7 +130,6 @@ const MOCK_DOCTORS = [
   },
 ];
 
-/* ── Mock API functions ── */
 /* ── fetchDoctorsAPI() ────────────────────────────────────────────
    Fetches all doctors from the Supabase 'doctors' table.
    If Supabase fails (network error, etc.), falls back to MOCK_DOCTORS
@@ -222,17 +221,12 @@ async function submitBookingAPI(payload) {
    function below can read and update them.
    ══════════════════════════════════════════════════════════════════ */
 
-// Available appointment hours (9am–4pm, skipping 12pm lunch)
-const HOURS     = [9,10,11,13,14,15,16];
-const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const MONTHS    = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
 export let allDoctors = [];      // All doctors loaded from Supabase
 export let visibleDoctors = [];  // Doctors currently shown after filtering/sorting
 
-let currentDoctor = null;   // The doctor the user is booking with
-let currentYear, currentMonth;  // Calendar navigation state
-let selectedDate, selectedSlot; // What the user has picked so far
+let currentDoctor = null;        // The doctor the user is booking with
+let currentYear, currentMonth;   // Calendar navigation state
+let selectedDate, selectedSlot;  // What the user has picked so far
 
 // Tracks which slots are already booked: key = "doctorId-date-hour" → true
 const bookedSlots = {};
@@ -240,52 +234,8 @@ const bookedSlots = {};
 // Which filter chips are currently active (e.g. "Available Today", "4★+")
 let activeChips = new Set();
 
-/* ── UTILITY HELPER FUNCTIONS ─────────────────────────────────────
-   Small reusable functions used throughout the booking flow.
-   ────────────────────────────────────────────────────────────────── */
-// available_days is stored in Supabase as "1,2,3" (comma-separated text)
-// This converts it to a Set of numbers: Set{1, 2, 3}
-// Day numbers: 0=Sunday, 1=Monday ... 6=Saturday
-function parseAvailableDays(raw){
-  if(!raw) return new Set();
-  if(Array.isArray(raw)) return new Set(raw.map(Number));
-  return new Set(String(raw).split(',').map(s=>Number(s.trim())).filter(n=>!isNaN(n)));
-}
-
-// excluded_dates is stored as "2025-12-25,2026-01-01" — converts to a Set of strings
-function parseExcludedDates(raw){
-  if(!raw) return new Set();
-  if(Array.isArray(raw)) return new Set(raw.map(s=>s.trim()));
-  return new Set(String(raw).split(',').map(s=>s.trim()).filter(Boolean));
-}
-
-// Formats a date as "YYYY-MM-DD" (the format stored in Supabase)
-// padStart(2,'0') ensures single digits get a leading zero: 5 → "05"
-function fmtDate(y,m,d){ return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-
-// Converts available_days numbers to readable text: [1,3,5] → "Mon, Wed, Fri"
-function daysLabel(raw){
-  const n = parseAvailableDays(raw);
-  return n.size ? [...n].sort().map(x=>DAY_NAMES[x]).join(', ') : '';
-}
-
-// Converts a numeric rating (4.5) to star symbols ("★★★★½")
-function starsHtml(rating){
-  const full = Math.floor(rating);
-  const half = rating - full >= 0.5;
-  let s = '★'.repeat(full);
-  if(half) s += '½';
-  return s;
-}
-
-// Generates a random booking reference like "HM-X7K2P"
-// Math.random().toString(36) converts a random number to base-36 (letters + digits)
-function generateRef(){
-  return 'HM-' + Math.random().toString(36).slice(2,7).toUpperCase();
-}
-
 /* ═════════════════════════════════════════════
-   SKELETON LOADERS — NEW
+   SKELETON LOADERS
    ═════════════════════════════════════════════ */
 export function renderSkeletons(count = 6) {
   const grid = document.getElementById('doctorsGrid');
@@ -312,9 +262,20 @@ export function renderSkeletons(count = 6) {
 }
 
 /* ═════════════════════════════════════════════
-   RENDER DOCTORS — MODIFIED (rich cards)
+   RENDER DOCTORS
    ═════════════════════════════════════════════ */
-export function renderDoctors(list) {
+export function renderDoctors(list, isInitialLoad = false) {
+  // On the initial load (called from main.js after fetchDoctorsAPI),
+  // populate allDoctors so the filter system has data to work with.
+  // On filter calls (from applyFiltersAndSort), isInitialLoad is false
+  // so we don't overwrite allDoctors with the already-filtered subset.
+  if (isInitialLoad) {
+    allDoctors = list;
+  }
+  // visibleDoctors always reflects what is currently on screen —
+  // booking.js uses this to look up which doctor was clicked.
+  visibleDoctors = list;
+
   const grid = document.getElementById('doctorsGrid');
   const count = document.getElementById('resultsCount');
 
@@ -361,14 +322,14 @@ export function renderDoctors(list) {
         </div>
       </div>
 
-      <!-- Rating row: NEW -->
+      <!-- Rating row -->
       <div class="dc-rating" aria-label="Rating: ${doc.rating} out of 5, ${doc.reviews} reviews">
         <span class="stars" aria-hidden="true">${starsHtml(doc.rating)}</span>
         <span class="rating-num">${doc.rating}</span>
         <span class="reviews-count">(${doc.reviews} reviews)</span>
       </div>
 
-      <!-- Meta: NEW -->
+      <!-- Meta -->
       <div class="dc-meta">
         ${expYrs ? `<div class="dc-meta-item"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#b8aed4" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="#b8aed4" stroke-width="1.5" stroke-linecap="round"/></svg>${expYrs}</div>` : ''}
         ${degs ? `<div class="dc-meta-item" style="font-size:.74rem;color:var(--ink-faint);">${degs}</div>` : ''}
@@ -378,7 +339,7 @@ export function renderDoctors(list) {
 
       ${avail ? `<div class="dc-avail" aria-label="Available days: ${avail}"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#6c4fbf" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round"/></svg><span>Available: ${avail}</span></div>` : ''}
 
-      <!-- Price row: NEW -->
+      <!-- Price row -->
       ${price ? `<div class="dc-price"><span class="price-label">Consultation fee</span><span class="price-val">${price} / session</span></div>` : ''}
 
       <div class="dc-footer">
@@ -392,7 +353,6 @@ export function renderDoctors(list) {
   // Attach click handlers
   grid.querySelectorAll('.book-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Button press animation
       btn.style.transform = 'scale(0.96)';
       setTimeout(() => { btn.style.transform = ''; }, 150);
       openCalendar(parseInt(btn.dataset.idx));
@@ -470,18 +430,6 @@ export function toggleChip(id) {
     chip.classList.add('active');
     chip.setAttribute('aria-pressed', 'true');
   }
-  applyFiltersAndSort();
-}
-
-function resetFilters() {
-  document.getElementById('searchInput').value = '';
-  document.getElementById('filterSpecialty').value = '';
-  document.getElementById('sortBy').value = 'default';
-  activeChips.clear();
-  document.querySelectorAll('.filter-chip').forEach(c => {
-    c.classList.remove('active');
-    c.setAttribute('aria-pressed', 'false');
-  });
   applyFiltersAndSort();
 }
 
