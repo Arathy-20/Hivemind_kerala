@@ -160,28 +160,30 @@ export async function fetchDoctorsAPI() {
         ? (Array.isArray(d.excluded_dates) ? d.excluded_dates : [d.excluded_dates])
         : [];
 
-      // experience column contains "Anxiety & Stress- Depression- CBT Therapy" style text
-      // use it as bio since bio is NULL, and set experience to 0
-      const bio = d.bio || '';
-      const expText = d.experience || '';
+      // In your Supabase doctors table:
+      // - bio column = NULL
+      // - experience column = specialty tags text like "Anxiety & Stress- Depression- CBT Therapy"
+      // So we use experience text as the specialties tag list, and build a generic bio.
+      const specialtyTags = d.experience
+        ? d.experience.split('-').map(s => s.trim()).filter(Boolean)
+        : [];
 
       return {
         id:             d.id,
         name:           d.name,
         specialty:      d.specialty,
         specialtyKey:   (d.specialty || '').toLowerCase().replace(/[^a-z]/g, '_'),
-        bio:            bio || expText || 'Specialist in ' + d.specialty,
-        experience:     0,
-        degrees:        expText ? expText.split('-').map(s => s.trim()).filter(Boolean) : [],
+        // Use specialty tags as bio — joined nicely, not repeated
+        bio:            specialtyTags.length ? specialtyTags.join(' · ') : ('Specialist in ' + d.specialty),
+        specialtyTags,  // shown as tag chips on the card
+        experience:     0,  // not stored as number in your DB
         rating:         d.rating || 4.5,
         reviews:        d.reviews || 0,
         price:          d.price || 800,
         location:       d.location || 'Kerala',
         available_days: availDays,
         excluded_dates: excludedDates,
-        image_url:      d.image_url ||
-          'https://ui-avatars.com/api/?name=' + encodeURIComponent(d.name) +
-          '&size=200&background=ede8f5&color=4a3b7a&rounded=true&bold=true&font-size=0.38',
+        image_url:      d.image_url || null,  // null = show initials avatar
         available_today: availDays.includes(todayDay),
       };
     });
@@ -299,47 +301,47 @@ export function renderDoctors(list, isInitialLoad = false) {
 
   grid.innerHTML = list.map((doc, idx) => {
     const avail  = daysLabel(doc.available_days);
-    const expYrs = doc.experience ? `${doc.experience} yrs exp` : '';
     const price  = doc.price ? `₹${doc.price}` : '';
-    const degs   = (doc.degrees||[]).join(' · ');
+
+    // Avatar: styled initials when no image (your doctors table has no image_url yet)
+    const initials = doc.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const bgColors = ['#ede8f5','#d1fae5','#fef3c7','#dbeafe'];
+    const fgColors = ['#4a3b7a','#065f46','#92400e','#1e40af'];
+    const ci = idx % bgColors.length;
+    const avatarHtml = doc.image_url
+      ? `<img class="dc-photo" src="${doc.image_url}" alt="${doc.name}" loading="lazy" width="60" height="60">`
+      : `<div class="dc-photo" style="display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;font-family:'DM Sans',sans-serif;background:${bgColors[ci]};color:${fgColors[ci]};">${initials}</div>`;
+
+    // Specialty tags — use .tag class which already exists in styles.css
+    const tagsHtml = (doc.specialtyTags || []).length
+      ? `<div class="dc-tags">${doc.specialtyTags.map(t => `<span class="tag">${t}</span>`).join('')}</div>`
+      : '';
 
     return `
-    <article class="doctor-card" role="listitem" aria-label="Dr. ${doc.name}, ${doc.specialty}">
+    <article class="doctor-card" role="listitem" aria-label="${doc.name}, ${doc.specialty}">
       <div class="dc-head">
-        <img class="dc-photo" src="${doc.image_url}" alt="Photo of ${doc.name}" loading="lazy" width="60" height="60"/>
+        ${avatarHtml}
         <div class="dc-info">
           <h3>${doc.name}</h3>
           <div class="specialty">${doc.specialty}</div>
           ${doc.location ? `<div class="location"><svg width="11" height="11" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/></svg>${doc.location}</div>` : ''}
-          <div class="verified-badge" tabindex="0" aria-label="Verified professional">
-            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="#2d7a58" stroke-width="2" stroke-linecap="round"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="#2d7a58" stroke-width="1.5"/></svg>
-            Verified
-            <span class="verified-tooltip" role="tooltip">License verified by Hivemind team</span>
-          </div>
+          <div class="verified-badge"><svg width="11" height="11" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="#2d7a58" stroke-width="2" stroke-linecap="round"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="#2d7a58" stroke-width="1.5"/></svg>Verified</div>
         </div>
         <div style="margin-left:auto;flex-shrink:0;">
           <div class="online-badge"><span class="pulse" aria-hidden="true"></span>${doc.available_today ? 'Today' : 'Online'}</div>
         </div>
       </div>
 
-      <!-- Rating row -->
-      <div class="dc-rating" aria-label="Rating: ${doc.rating} out of 5, ${doc.reviews} reviews">
+      <div class="dc-rating" aria-label="Rating: ${doc.rating} out of 5">
         <span class="stars" aria-hidden="true">${starsHtml(doc.rating)}</span>
         <span class="rating-num">${doc.rating}</span>
         <span class="reviews-count">(${doc.reviews} reviews)</span>
       </div>
 
-      <!-- Meta -->
-      <div class="dc-meta">
-        ${expYrs ? `<div class="dc-meta-item"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="#b8aed4" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="#b8aed4" stroke-width="1.5" stroke-linecap="round"/></svg>${expYrs}</div>` : ''}
-        ${degs ? `<div class="dc-meta-item" style="font-size:.74rem;color:var(--ink-faint);">${degs}</div>` : ''}
-      </div>
+      ${tagsHtml}
 
-      ${doc.bio ? `<div class="dc-bio">${doc.bio}</div>` : ''}
+      ${avail ? `<div class="dc-avail"><svg width="13" height="13" fill="none" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#6c4fbf" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round"/></svg><span>Available: ${avail}</span></div>` : ''}
 
-      ${avail ? `<div class="dc-avail" aria-label="Available days: ${avail}"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#6c4fbf" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#6c4fbf" stroke-width="1.5" stroke-linecap="round"/></svg><span>Available: ${avail}</span></div>` : ''}
-
-      <!-- Price row -->
       ${price ? `<div class="dc-price"><span class="price-label">Consultation fee</span><span class="price-val">${price} / session</span></div>` : ''}
 
       <div class="dc-footer">
