@@ -3,8 +3,7 @@
 
 > A web application where patients in Kerala can find, browse, and book appointments with verified mental health specialists. Built with vanilla JavaScript, Supabase, and Google Gemini AI.
 
-**Live Demo:** [https://arathy-20.github.io/Hivemind/](https://arathy-20.github.io/Hivemind/)
-
+**Live Demo:** **Live Demo:** [https://arathy-20.github.io/Hivemind_kerala/](https://arathy-20.github.io/Hivemind_kerala/)
 ---
 
 ## 📋 Table of Contents
