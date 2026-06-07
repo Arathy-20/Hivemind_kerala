@@ -682,3 +682,13 @@
       .booking-steps { gap: 0; overflow-x: auto; padding-bottom: 4px; }
       .step-line { width: 30px; }
     }
+/* ── Reminder Banner ─────────────────────────────────────── */
+    .reminder-banner { display: none; background: linear-gradient(135deg, #3d9e78, #2d7a58); color: #fff; padding: 10px 20px; position: relative; z-index: 100; }
+    .reminder-banner.visible { display: block; }
+    .reminder-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .reminder-icon { width: 36px; height: 36px; background: rgba(255,255,255,.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .reminder-text { display: flex; flex-direction: column; }
+    .reminder-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+    .reminder-doctor { font-size: .95rem; font-weight: 600; }
+    .reminder-time { font-size: .82rem; opacity: .85; margin-left: auto; }
+    .reminder-countdown { font-size: .8rem; font-weight: 700; background: rgba(255,255,255,.2); padding: 4px 12px; border-radius: 99px; white-space: nowrap; }
