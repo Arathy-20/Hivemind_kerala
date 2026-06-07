@@ -79,7 +79,7 @@ export async function loadUpcomingSession() {
     else countdown = 'Starting now';
 
     // Update the banner
-    document.getElementById('reminder-detail').textContent = next.doctor_name;
+    document.getElementById('reminder-doctor').textContent = next.doctor_name;
     document.getElementById('reminder-time').textContent   = `${niceDate} · ${timeStr}`;
     document.getElementById('reminder-countdown').textContent = countdown;
 
